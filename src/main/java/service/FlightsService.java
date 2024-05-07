@@ -39,6 +39,23 @@ public class FlightsService {
 
 
     public void getFlightInfo(int id){
+        boolean flightFound = false;
+
+        for (Flight flight : flightsDAO.getAllFlights()){
+            if(flight.getId() == id){
+                System.out.println("Flight ID: " + flight.getId());
+                System.out.println("Origin: " + flight.getOrigin());
+                System.out.println("Destination: " + flight.getDestination());
+                System.out.println("Departure Time: " + flight.getDepartureTime());
+                System.out.println("Available Seats: " + flight.getAvailableSeats());
+                flightFound = true;
+                break;
+            }
+        }
+
+        if(!flightFound){
+            System.out.println("Flight with the id : " + id + " was not found");
+        }
 
 
     }
