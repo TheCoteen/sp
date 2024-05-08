@@ -1,0 +1,17 @@
+Index: src/main/java/service/FlightsService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package service;\r\n\r\nimport dao.FlightsDAO;\r\nimport model.Flight;\r\n\r\nimport java.time.LocalDateTime;\r\nimport java.util.Map;\r\n\r\npublic class FlightsService {\r\n    FlightsDAO flightsDAO;\r\n\r\n    public FlightsService(FlightsDAO flightsDAO) {\r\n        this.flightsDAO = flightsDAO;\r\n    }\r\n\r\n    public void displayOnlineBoard(){\r\n        System.out.println(\"Displaying flights within the next 24 hours :\");\r\n\r\n        LocalDateTime now = LocalDateTime.now();\r\n        LocalDateTime next24hours = now.plusHours(24);\r\n        boolean flightFound = false;\r\n\r\n        for (Flight flight : flightsDAO.getAllFlights()){\r\n            if(flight.getOrigin().equals(\"Kiev\") && flight.getDepartureTime().isAfter(now) && flight.getDepartureTime().isBefore(next24hours)){\r\n                System.out.println(\"Flight ID: \" + flight.getId());\r\n                System.out.println(\"Origin: \" + flight.getOrigin());\r\n                System.out.println(\"Destination: \" + flight.getDestination());\r\n                System.out.println(\"Departure Time: \" + flight.getDepartureTime());\r\n                System.out.println(\"Available Seats: \" + flight.getAvailableSeats());\r\n                flightFound = true;\r\n            }\r\n        }\r\n\r\n        if(!flightFound){\r\n            System.out.println(\"There are no flights found within next 24 hours from Kiev\");\r\n        }\r\n\r\n    }\r\n\r\n\r\n    public void getFlightInfo(int id){\r\n        boolean flightFound = false;\r\n\r\n        for (Flight flight : flightsDAO.getAllFlights()){\r\n            if(flight.getId() == id){\r\n                System.out.println(\"Flight ID: \" + flight.getId());\r\n                System.out.println(\"Origin: \" + flight.getOrigin());\r\n                System.out.println(\"Destination: \" + flight.getDestination());\r\n                System.out.println(\"Departure Time: \" + flight.getDepartureTime());\r\n                System.out.println(\"Available Seats: \" + flight.getAvailableSeats());\r\n                flightFound = true;\r\n                break;\r\n            }\r\n        }\r\n\r\n        if(!flightFound){\r\n            System.out.println(\"Flight with the id : \" + id + \" was not found\");\r\n        }\r\n\r\n\r\n    }\r\n\r\n    public void searchFlight(String destination, LocalDateTime date, int numOfPeople){\r\n\r\n    }\r\n\r\n    public void bookFlight(int id, Map<String, String> namesAndSurnames){\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n}\r\n
+===================================================================
+diff --git a/src/main/java/service/FlightsService.java b/src/main/java/service/FlightsService.java
+--- a/src/main/java/service/FlightsService.java	
++++ b/src/main/java/service/FlightsService.java	
+@@ -61,7 +61,7 @@
+     }
+ 
+     public void searchFlight(String destination, LocalDateTime date, int numOfPeople){
+-
++        System.out.println("Hello world");
+     }
+ 
+     public void bookFlight(int id, Map<String, String> namesAndSurnames){
