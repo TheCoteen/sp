@@ -1,10 +1,17 @@
 package service;
 
+import dao.BookingDAO;
 import dao.FlightsDAO;
-import model.Flight;
+import dao.User;
+import dao.UserDAO;
+import model.*;
+import service.exceptions.DuplicateFlightEntryException;
+import service.exceptions.FlightNotFoundException;
 
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Scanner;
 
 public class FlightsService {
     FlightsDAO flightsDAO;
@@ -13,62 +20,101 @@ public class FlightsService {
         this.flightsDAO = flightsDAO;
     }
 
-    public void displayOnlineBoard(){
+    public FlightDTO createFlight(FlightDTO flightDTO){
+        Flight flight = new Flight(flightDTO.getOrigin(), flightDTO.getDestination(), flightDTO.getDepartureTime(), flightDTO.getAvailableSeats());
+
+        if(flightsDAO.existById(flight)){
+            throw new DuplicateFlightEntryException("Flight already exists!");
+        }
+        flightsDAO.saveFlight(flight);
+
+        return new FlightDTO(flight.getOrigin(), flight.getDestination(), flight.getDepartureTime(), flight.getAvailableSeats());
+    }
+
+    public void displayOnlineBoard() {
         System.out.println("Displaying flights within the next 24 hours :");
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime next24hours = now.plusHours(24);
         boolean flightFound = false;
 
-        for (Flight flight : flightsDAO.getAllFlights()){
-            if(flight.getOrigin().equals("Kiev") && flight.getDepartureTime().isAfter(now) && flight.getDepartureTime().isBefore(next24hours)){
-                System.out.println("Flight ID: " + flight.getId());
-                System.out.println("Origin: " + flight.getOrigin());
-                System.out.println("Destination: " + flight.getDestination());
-                System.out.println("Departure Time: " + flight.getDepartureTime());
-                System.out.println("Available Seats: " + flight.getAvailableSeats());
+        for (Flight flight : flightsDAO.getAllFlights()) {
+            if (flight.getOrigin().equals("Kiev") && flight.getDepartureTime().isAfter(now) && flight.getDepartureTime().isBefore(next24hours)) {
+                printFlight(flight);
                 flightFound = true;
             }
         }
 
-        if(!flightFound){
-            System.out.println("There are no flights found within next 24 hours from Kiev");
+        if (!flightFound) {
+            throw new FlightNotFoundException("FLight within 24 hours were not found!");
         }
 
     }
 
-
-    public void getFlightInfo(int id){
+    public FlightDTO getFlightInfo() {
+        System.out.println("Enter flight ID:");
+        int id = new Scanner(System.in).nextInt();
         boolean flightFound = false;
-
-        for (Flight flight : flightsDAO.getAllFlights()){
-            if(flight.getId() == id){
-                System.out.println("Flight ID: " + flight.getId());
-                System.out.println("Origin: " + flight.getOrigin());
-                System.out.println("Destination: " + flight.getDestination());
-                System.out.println("Departure Time: " + flight.getDepartureTime());
-                System.out.println("Available Seats: " + flight.getAvailableSeats());
+        Flight foundFlight = new Flight();
+        for (Flight flight : flightsDAO.getAllFlights()) {
+            if (flight.getId() == id) {
+                foundFlight = flight;
                 flightFound = true;
                 break;
             }
         }
 
+        if (!flightFound) {
+            throw new FlightNotFoundException("Flight was not found");
+        }
+
+        return new FlightDTO(foundFlight.getId(),foundFlight.getOrigin(),foundFlight.getDestination(),foundFlight.getDepartureTime(),foundFlight.getAvailableSeats());
+    }
+
+    public FlightDTO searchFlight(){
+        System.out.println("Enter the destination:");
+
+        String destination = new Scanner(System.in).next();
+
+        System.out.println("Enter date as (YYYY-MM-DDTHH:MM):");
+
+        LocalDateTime date = LocalDateTime.parse(new Scanner(System.in).next());
+
+
+        boolean flightFound = false;
+
+        Flight foundFlight = new Flight();
+
+        for (Flight f : flightsDAO.getAllFlights()) {
+            if (f.getDestination().equalsIgnoreCase(destination) && f.getDepartureTime().isEqual(date)) {
+                flightFound = true;
+                foundFlight = f;
+
+                break;
+            }
+        }
+
         if(!flightFound){
-            System.out.println("Flight with the id : " + id + " was not found");
+            throw new FlightNotFoundException("Flight not found");
         }
 
 
+        return new FlightDTO(foundFlight.getId(),foundFlight.getOrigin(), foundFlight.getDestination(), foundFlight.getDepartureTime(),foundFlight.getAvailableSeats());
     }
 
-    public void searchFlight(String destination, LocalDateTime date, int numOfPeople){
-
+    public void printFlight(Flight f){
+        System.out.println("Flight ID: " + f.getId());
+        System.out.println("Origin: " + f.getOrigin());
+        System.out.println("Destination: " + f.getDestination());
+        System.out.println("Departure Time: " + f.getDepartureTime());
+        System.out.println("Available Seats: " + f.getAvailableSeats());
     }
 
-    public void bookFlight(int id, Map<String, String> namesAndSurnames){
-
-    }
 
 
 
 
 }
+
+
+

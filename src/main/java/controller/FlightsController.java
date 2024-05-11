@@ -1,5 +1,7 @@
 package controller;
 
+import model.Flight;
+import model.FlightDTO;
 import service.FlightsService;
 
 public class FlightsController {
@@ -9,15 +11,21 @@ public class FlightsController {
         this.flightsService = flightsService;
     }
 
+    public FlightDTO createFlight(FlightDTO flightDTO){
+        return flightsService.createFlight(flightDTO);
+    }
+
     public void displayOnlineBoard(){
-
+        flightsService.displayOnlineBoard();
     }
 
-    public void showFlightInfo(int id){
-
+    public FlightDTO showFlightInfo(){
+        return flightsService.getFlightInfo();
     }
 
-    public void searchAndBookFlight(){
-
+    public FlightDTO searchFlight(){
+        return flightsService.searchFlight();
     }
+
+    public void printFlight(Flight f){flightsService.printFlight(f);}
 }
