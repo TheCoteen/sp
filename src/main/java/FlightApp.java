@@ -11,6 +11,8 @@ import model.FlightDTO;
 import service.BookingService;
 import service.FlightsService;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.time.LocalDateTime;
 
 public class FlightApp {
@@ -20,16 +22,13 @@ public class FlightApp {
         FlightsService flightsService = new FlightsService(flightsDAO);
         FlightsController flightsController = new FlightsController(flightsService);
 
+
         BookingDAO bookingDAO = new BookingDAOInFile(new ObjectMapper().registerModule(new JavaTimeModule()));
         BookingService bookingService = new BookingService(bookingDAO);
         BookingController bookingController = new BookingController(bookingService);
 
         ConsoleApp consoleApp = new ConsoleApp(flightsController, bookingController);
         consoleApp.start();
-
-
-
-
 
 
 

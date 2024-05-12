@@ -3,6 +3,7 @@ package dao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Booking;
 import model.Flight;
+import model.FlightDTO;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -77,4 +78,5 @@ public class FlightDAOInFile implements FlightsDAO{
 
         return false;
     }
+
 }

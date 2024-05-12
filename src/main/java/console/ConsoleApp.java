@@ -18,7 +18,6 @@ public class ConsoleApp {
         this.flightsController = flightsController;
         this.bookingController = bookingController;
     }
-
     public void start() {
         boolean exit = false;
         while (!exit) {

@@ -1,0 +1,1 @@
+{"bookingID":1,"flightID":100001,"origin":"Kiev","destination":"Baku","passengers":[{"fullName":"Kenan"}],"bookingType":"CONFIRMED"}

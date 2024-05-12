@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BookingService {
-
-
     private BookingDAO bookingDAO;
-
     public BookingService(BookingDAO bookingDAO) {
         this.bookingDAO = bookingDAO;
     }
@@ -74,7 +71,6 @@ public class BookingService {
         return bookingDAO.getAllBookings();
 
     }
-
     public Collection<Booking> mybookings(){
         System.out.println("Enter your name:");
         String name = new Scanner(System.in).nextLine();
@@ -90,6 +86,4 @@ public class BookingService {
 
         return myBookings;
     }
-
-
 }
